@@ -479,6 +479,12 @@ img { max-width: 100%; }
   align-items: center;
 }
 
+@media (max-width: 768px) {
+  .services__panel {
+    grid-template-columns: 1fr;
+  }
+}
+
 .services__panel-text {
   display: flex;
   flex-direction: column;
