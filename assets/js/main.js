@@ -1,6 +1,49 @@
 (() => {
   "use strict";
 
+  /* Cookie consent: GA4 only loads after Accept, choice remembered in localStorage */
+  const GA_MEASUREMENT_ID = "G-N7EDH8CX8M";
+  const CONSENT_KEY = "cookie-consent";
+
+  function loadGoogleAnalytics() {
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", GA_MEASUREMENT_ID);
+  }
+
+  function showCookieBanner() {
+    const banner = document.createElement("div");
+    banner.className = "cookie-banner";
+    banner.setAttribute("role", "region");
+    banner.setAttribute("aria-label", "Cookie consent");
+    banner.innerHTML = `
+      <p class="cookie-banner__text">This site uses cookies for analytics.</p>
+      <button type="button" class="cookie-banner__accept">Accept</button>
+    `;
+    document.body.appendChild(banner);
+
+    banner.querySelector(".cookie-banner__accept").addEventListener("click", () => {
+      try { localStorage.setItem(CONSENT_KEY, "accepted"); } catch (e) {}
+      loadGoogleAnalytics();
+      banner.remove();
+    });
+  }
+
+  let cookieConsent = null;
+  try { cookieConsent = localStorage.getItem(CONSENT_KEY); } catch (e) {}
+
+  if (cookieConsent === "accepted") {
+    loadGoogleAnalytics();
+  } else {
+    showCookieBanner();
+  }
+
   /* Mobile nav toggle */
   const menuToggle = document.querySelector("[data-menu-toggle]");
   const mobileNav = document.querySelector("[data-mobile-nav]");
