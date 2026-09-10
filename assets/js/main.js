@@ -44,6 +44,22 @@
     showCookieBanner();
   }
 
+  /* Header logo: force scroll-to-top when already on the homepage, since the
+     sticky header sits at id="top" and native #hash anchoring treats it as
+     already in view, so clicking the logo would otherwise change the URL
+     hash without scrolling. */
+  const brandLink = document.querySelector(".site-header .brand-link");
+  if (brandLink) {
+    brandLink.addEventListener("click", (e) => {
+      const target = new URL(brandLink.href, window.location.href);
+      if (target.pathname === window.location.pathname) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
+    });
+  }
+
   /* Mobile nav toggle */
   const menuToggle = document.querySelector("[data-menu-toggle]");
   const mobileNav = document.querySelector("[data-mobile-nav]");
