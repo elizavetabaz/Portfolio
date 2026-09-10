@@ -334,9 +334,17 @@ img { max-width: 100%; }
   margin: 0 auto;
   padding: clamp(48px, 6vw, 84px) var(--gutter);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-template-columns: 1fr;
   gap: clamp(24px, 2.5vw, 36px);
   align-items: start;
+}
+
+@media (min-width: 640px) {
+  .broken { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .broken { grid-template-columns: repeat(3, 1fr); }
 }
 
 .broken__intro {
